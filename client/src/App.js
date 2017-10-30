@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import DrawingForm from './components/DrawingForm';
 import DrawingList from './components/DrawingList';
+import Drawing from './components/Drawing';
 
 
 class App extends Component {
@@ -13,22 +14,36 @@ class App extends Component {
 
     }
 
-
-    handleChange = (event) => {
+    selectDrawing = (drawing) => {
         this.setState({
-            search: event.target.value
+            selectedDrawing: drawing
         })
     }
 
+
     render() {
+        let ctrl = (
+            <div>
+                <DrawingForm/>
+                <DrawingList selectDrawing={this.selectDrawing}/>
+            </div>
+        );
+
+        if (this.state.selectedDrawing) {
+            ctrl = (
+                <Drawing drawing={this.state.selectedDrawing}
+                         key={this.state.selectedDrawing.id}></Drawing>
+            )
+        }
+
+
         return (
             <div className="App">
                 <div className="App-header">
                     <h2>Our awesome drawing app</h2>
                 </div>
+                {ctrl}
 
-                <DrawingForm/>
-                <DrawingList/>
             </div>
 
         );
