@@ -2,6 +2,28 @@ const io = require('socket.io')();
 const port = 8000;
 const r = require('rethinkdb');
 
+function createdDrawing({connection, name}) {
+    r.table('drawings')
+        .insert({
+            name,
+            timestamp: new Date()
+        })
+        .run(connection)
+        .then(() => {
+            console.log('created a drawing ', name);
+        })
+}
+
+
+function subscribeToDrawings({client, connection}) {
+    r.table('drawings')
+        .changes({include_initial: true})
+        .run(connection)
+        .then((cursor) => {
+            cursor.each((err, drawingRow) => client.emit('drawing', drawingRow.new_val))
+        })
+}
+
 
 r.connect({
     host: 'localhost',
@@ -11,18 +33,13 @@ r.connect({
 
 
     io.on('connection', (client) => {
-        client.on('subscribeToTimer', (interval) => {
-            console.log("client is subscribing to timer with ", interval);
-            r.table('timers')
-                .changes()
-                .run(connection)
-                .then((cursor) => {
-                    cursor.each((err, timerRow) => {
-                        console.log(timerRow);
-                        client.emit('timer', timerRow.new_val.timestamp);
-                    })
-                })
+        client.on('createDrawing', ({name}) => {
+            createdDrawing({connection, name});
         })
+
+        client.on('subscribeToDrawings', () => subscribeToDrawings({client, connection}));
+
+
     })
 
 
