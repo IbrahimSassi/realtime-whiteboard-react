@@ -1,10 +1,16 @@
 import React from 'react';
 import Canvas from 'simple-react-canvas';
+import {publishLine} from '../api';
 
 
 export class Drawing extends React.Component {
     constructor(props, context) {
         super(props, context);
+    }
+
+
+    handleDraw = (line) => {
+        publishLine({drawingId: this.props.drawing.id, line})
     }
 
 
@@ -14,7 +20,7 @@ export class Drawing extends React.Component {
             this.props.drawing ? (
                 <div className="Drawing">
                     <div className="Drawing-title">{this.props.drawing.name}</div>
-                    <Canvas drawingEnabled={true}></Canvas>
+                    <Canvas drawingEnabled={true} onDraw={this.handleDraw}></Canvas>
                 </div>
 
             ) : null

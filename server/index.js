@@ -25,6 +25,14 @@ function subscribeToDrawings({client, connection}) {
 }
 
 
+function handleLinePublish({connection, line}) {
+    // console.log('save line to the db')
+    r.table('lines')
+        .insert(Object.assign(line, {timestamp:new Date()}))
+        .run(connection);
+}
+
+
 r.connect({
     host: 'localhost',
     port: 28015,
@@ -38,6 +46,12 @@ r.connect({
         })
 
         client.on('subscribeToDrawings', () => subscribeToDrawings({client, connection}));
+
+
+        client.on('publishLine', (line) => {
+            // console.log(line)
+            handleLinePublish({line, connection})
+        })
 
 
     })
