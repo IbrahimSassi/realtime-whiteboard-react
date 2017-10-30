@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
-import DrawingForm from './DrawingForm';
+import DrawingForm from './components/DrawingForm';
+import DrawingList from './components/DrawingList';
 
-import {subscribeToDrawings} from './api';
 
 class App extends Component {
 
@@ -28,7 +28,9 @@ class App extends Component {
                 </div>
 
                 <DrawingForm/>
+                <DrawingList/>
             </div>
+
         );
     }
 }

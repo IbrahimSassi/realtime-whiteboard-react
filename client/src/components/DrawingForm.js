@@ -1,5 +1,5 @@
 import React from 'react';
-import {createdDrawing} from './api';
+import {createdDrawing} from '../api';
 
 
 export class DrawingForm extends React.Component {
