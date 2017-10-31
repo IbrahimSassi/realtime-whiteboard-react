@@ -3,6 +3,7 @@ import './App.css';
 import DrawingForm from './components/DrawingForm';
 import DrawingList from './components/DrawingList';
 import Drawing from './components/Drawing';
+import Connection from './components/Connection';
 
 
 class App extends Component {
@@ -42,6 +43,7 @@ class App extends Component {
                 <div className="App-header">
                     <h2>Our awesome drawing app</h2>
                 </div>
+                <Connection></Connection>
                 {ctrl}
 
             </div>

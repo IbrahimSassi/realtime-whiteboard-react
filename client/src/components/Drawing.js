@@ -34,7 +34,7 @@ export class Drawing extends React.Component {
         return (
             this.props.drawing ? (
                 <div className="Drawing">
-                    <div className="Drawing-title">{this.props.drawing.name}</div>
+                    <div className="Drawing-title">{this.props.drawing.name} {this.state.lines.length}</div>
                     <Canvas drawingEnabled={true}
                             onDraw={this.handleDraw}
                             lines={this.state.lines}

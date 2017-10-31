@@ -2,7 +2,8 @@ import openSocket from 'socket.io-client';
 import Rx from 'rxjs/Rx'
 
 
-const socket = openSocket.connect('http://localhost:8000');
+const port = parseInt(window.location.search.replace('?', ''), 10) || 8000
+const socket = openSocket.connect(`http://localhost:${port}`);
 
 
 function subscribeToDrawings(cb) {
@@ -40,9 +41,26 @@ function subscribeToDrawingLines(drawingId, cb) {
     socket.emit('subscribeToDrawingLines', drawingId)
 }
 
+
+function subscribeToConnectionEvent(cb) {
+    socket.on('connect', () => cb({
+        state: 'connected',
+        port
+    }))
+    socket.on('disconnect', () => cb({
+        state: 'disconnected',
+        port
+    }))
+    socket.on('connect_error', () => cb({
+        state: 'disconnected',
+        port
+    }))
+}
+
 export {
     subscribeToDrawings,
     createdDrawing,
     publishLine,
-    subscribeToDrawingLines
+    subscribeToDrawingLines,
+    subscribeToConnectionEvent
 };
